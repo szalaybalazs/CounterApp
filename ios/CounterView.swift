@@ -10,6 +10,7 @@
 
 import UIKit
 class CounterView: UIView {
+  @objc var target: NSNumber = 0
   @objc var count: NSNumber = 0 {
     didSet {
       button.setTitle(String(describing: count), for: .normal)
@@ -32,6 +33,7 @@ class CounterView: UIView {
   }
   
   @objc var onUpdate: RCTDirectEventBlock?
+  @objc var onWinner: RCTDirectEventBlock?
   
   lazy var button: UIButton = {
     
@@ -61,6 +63,11 @@ class CounterView: UIView {
   
   @objc func increment() {
     count = count.intValue + 1 as NSNumber
+    if(count == target) {
+      if onWinner != nil {
+        onWinner!(["count": count])
+      }
+    }
   }
   
   @objc func update(value: NSNumber) {

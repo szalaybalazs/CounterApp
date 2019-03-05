@@ -1,23 +1,17 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- * @lint-ignore-every XPLATJSCOPYRIGHT1
- */
-
 import React, {Component} from 'react';
 import { Platform, StyleSheet, Text, View, TouchableOpacity, requireNativeComponent, UIManager, findNodeHandle } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 
 const CounterView = requireNativeComponent("CounterView");
 
+const target = 5;
+
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      count: 0
+      count: 0,
+      winner: null
     }
   }
 
@@ -31,26 +25,43 @@ export default class App extends Component {
     })
   }
 
+  handleWinner = winner => {
+    this.setState({ winner })
+    console.warn(winner)
+  }
+
   updateNative = () => {
     console.log(this.counterRef)
     UIManager.dispatchViewManagerCommand(
-      findNodeHandle(this.counterRef),                     // 1
-      UIManager.getViewManagerConfig("CounterView").Commands.updateFromManager, // 2
-      [this.state.count]                                   // 3
+      findNodeHandle(this.counterRef),
+      UIManager.getViewManagerConfig("CounterView").Commands.updateFromManager,
+      [this.state.count]
     );
   }
 
-  increment = () => this.setState({ count: this.state.count + 1})
+  increment = () => {
+    if(this.state.count == target - 1) this.handleWinner(1);
+    this.setState({ count: this.state.count + 1})
+  }
 
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity onLongPress={this.updateNative} onPress={this.increment} style={{ flex: 1, alignItems: 'center', width: '100%', justifyContent: 'center', elevation: 2}}>
-          <Text style={{fontSize: 50, color: 'orange', textAlign: 'center'}}>
-            {this.state.count}
-          </Text>
-        </TouchableOpacity>
-        <CounterView ref={e => this.counterRef = e} count={0} style={styles.wrapper} onUpdate={this.update} />
+        {this.state.winner == null ? (
+          <View style={{width: '100%', height: '100%' }}>
+            <TouchableOpacity onLongPress={this.updateNative} onPress={this.increment} style={{ flex: 1, alignItems: 'center', width: '100%', justifyContent: 'center', elevation: 2}}>
+              <Text style={{fontSize: 50, color: 'orange', textAlign: 'center', fontFamily: 'Noto Serif'}}>
+                {this.state.count}
+              </Text>
+            </TouchableOpacity>
+            <CounterView ref={e => this.counterRef = e} count={0} style={styles.wrapper} onUpdate={this.update} target={target} onWinner={() => this.handleWinner(2)} />
+          </View>
+        ) : (
+          <View style={[styles.container, { width: '100%', height: '100%' }]}>
+            <Text style={{ fontSize: 32, color: '#555' }}>The winner is: {this.state.winner == 1 ? 'React' : 'Swift'}</Text>
+          </View>
+        )}
+        
       </View>
     );
   }
