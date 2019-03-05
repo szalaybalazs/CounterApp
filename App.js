@@ -11,12 +11,18 @@ export default class App extends Component {
     super(props);
     this.state = {
       count: 0,
-      winner: null
+      winner: null,
+      qod: null
     }
   }
 
   componentDidMount() {
     SplashScreen.hide();
+
+    fetch('http://quotes.rest/qod').then(res => res.json())
+    .then(res => {
+      this.setState({ qod: res.contents.quotes[0]})
+    })
   }
 
   update = e => {
@@ -27,7 +33,6 @@ export default class App extends Component {
 
   handleWinner = winner => {
     this.setState({ winner })
-    console.warn(winner)
   }
 
   updateNative = () => {
@@ -59,6 +64,13 @@ export default class App extends Component {
         ) : (
           <View style={[styles.container, { width: '100%', height: '100%' }]}>
             <Text style={{ fontSize: 32, color: '#555' }}>The winner is: {this.state.winner == 1 ? 'React' : 'Swift'}</Text>
+            {this.state.qod && (
+              <View>
+                <Text style={{ textAlign: 'center', fontSize: 24, marginTop: 18, marginBottom: 8, color: '#333' }}>Quote of the day:</Text>
+                <Text style={{ fontSize: 18, color: '#555', paddingLeft: 12, paddingRight: 12 }}>{this.state.qod.quote}</Text>
+                <Text style={{ fontSize: 18, color: '#555', paddingLeft: 12, paddingRight: 12, textAlign: 'right' }}>{this.state.qod.author}</Text>
+              </View>
+            )}
           </View>
         )}
         
