@@ -9,6 +9,7 @@
 
 import React, {Component} from 'react';
 import { Platform, StyleSheet, Text, View, TouchableOpacity, requireNativeComponent, UIManager, findNodeHandle } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 
 const CounterView = requireNativeComponent("CounterView");
 
@@ -18,6 +19,10 @@ export default class App extends Component {
     this.state = {
       count: 0
     }
+  }
+
+  componentDidMount() {
+    SplashScreen.hide();
   }
 
   update = e => {
