@@ -26,9 +26,7 @@ export default class List extends Component {
     this.setState({ content })
   }
 
-  renderItem = item => {
-    return <ListItem key={item.index} item={item} />
-  }
+  renderItem = item => <ListItem key={item.index} item={item} />
 
   render() {
     return (
@@ -49,8 +47,4 @@ export default class List extends Component {
   }
 }
 
-const ListItem = ({ item }) => {
-  return (
-    <Text style={{ backgroundColor: '#ddd', margin: 6, flex: 1, padding: 12, fontSize: 16}}>{item.item.key}</Text>
-  )
-}
+const ListItem = ({ item }) => <Text style={{ backgroundColor: '#ddd', margin: 6, flex: 1, padding: 12, fontSize: 16}}>{item.item.key}</Text>
