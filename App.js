@@ -3,6 +3,7 @@ import { Platform, StyleSheet, Text, View, TouchableOpacity, requireNativeCompon
 import SplashScreen from 'react-native-splash-screen';
 import Counter from './Counter';
 import { createStackNavigator, createAppContainer } from "react-navigation";
+import List from './List';
 
 
 class App extends Component {
@@ -28,6 +29,13 @@ class App extends Component {
             fontSize: 18
           }}>Start Counting!</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('List')}>
+          <Text style={{
+            padding: 12,
+            color: '#333',
+            fontSize: 18
+          }}>Leaderboard</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -38,6 +46,12 @@ const AppNavigator = createStackNavigator({
     screen: App,
     navigationOptions: {
       title: 'HOME'
+    }
+  },
+  List: { 
+    screen: List,
+    navigationOptions: {
+      title: 'Leaderboard'
     }
   },
   Counter: { 
